@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Página de Login</title>
+</head>
+<body>
+    <header>
+        <!-- Cabeçalho -->
+        <h1>Agenda de Contatos</h1>
+    </header>
+    <div class="login-container">
+        <!-- Div quadrada -->
+        <div class="login-box">
+            <img src="https://png.pngtree.com/png-clipart/20221008/original/pngtree-agenda-png-image_8666400.png" alt="Logo da empresa">
+            <!-- Imagem alinhada horizontalmente -->
+            <input type="text" placeholder="Usuário">
+            <!-- Campo de usuário -->
+            <input type="password" placeholder="Senha">
+            <!-- Campo de senha -->
+            <button>Entrar</button>
+            <!-- Botão de entrar -->
+        </div>
+    </div>
+</body>
+
+<script>
+  const loginForm = document.querySelector('.login-box');
+  const usernameInput = document.querySelector('input[type="text"]');
+  const passwordInput = document.querySelector('input[type="password"]');
+  const loginButton = document.querySelector('button');
+
+  loginButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (username === 'admin' && password === 'admin') {
+      window.location.href = 'home.html';
+    } else {
+      usernameInput.classList.add('error');
+      passwordInput.classList.add('error');
+      alert('Usuário ou senha inválidos');
+    }
+  });
+</script>
+
+
+</html>

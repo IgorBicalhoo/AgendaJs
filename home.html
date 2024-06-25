@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Contato</title>
+  <style>
+  
+    .header {
+       background-color: #53d4ff; /* azul claro */
+       padding: 10px;
+       text-align: left; /* alinhamento à esquerda */
+     }
+ 
+    .header h1 {
+       color: #fff; /* texto branco */
+       font-size: 18px; /* diminui a fonte */
+     }
+ 
+    .form-container {
+       display: flex;
+       justify-content: center;
+       margin: 20px;
+     }
+ 
+    .form-inputs {
+       flex: 1;
+       background-color: #b3b3b3; /* cinza claro */
+       padding: 15px; /* reduziu o padding para 10px */
+       border: 1px solid #ccc;
+       margin-bottom: 0; /* adicionado */
+     }
+ 
+    .form-inputs label {
+       color: #fff; /* texto branco */
+     }
+ 
+    .form-inputs input[type="text"] {
+       width: 90%;
+       height: 30px;
+       padding: 10px;
+       font-size: 16px;
+       border: 1px solid #ccc;
+     }
+ 
+    .form-buttons {
+       flex: 1;
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       padding: 3px; /* reduziu o padding para 10px */
+       margin-left: -5%; /* ajustou a margem esquerda para -20px */
+       margin-top: 0; /* adicionado */
+     }
+ 
+    .form-buttons button {
+       width: 120px;
+       /* margin-right: 250px!important;*/
+       padding: 10px 20px;
+       border: none;
+       cursor: pointer;
+       margin: 3px; /* reduziu a margem para 5px */
+     }
+ 
+    .form-buttons button.incluir {
+       background-color: #2ECC40; /* verde */
+       color: #fff;
+     }
+ 
+    .form-buttons button.editar {
+       background-color: #F7DC6F; /* amarelo */
+       color: #333;
+     }
+ 
+    .form-buttons button.salvar {
+       background-color: #53d4ff; /* azul claro */
+       color: #fff;
+     }
+ 
+    .form-buttons button.cancelar {
+       background-color: #fff;
+       color: #ADD8E6; /* azul claro */
+       border: 1px solid #ADD8E6;
+     }
+ 
+    .form-buttons button.excluir {
+       background-color: #E74C3C; /* vermelho */
+       color: #fff;
+     }
+ 
+    .pagination {
+       display: flex;
+       margin-top: 10px;
+       margin-left: 20px; /* adicionado */
+     }
+ 
+    .pagination button {
+       background-color: #000;
+       color: #fff;
+       padding: 10px;
+       border: none;
+       cursor: pointer;
+       margin: 3px;
+     }
+
+     #incluir{
+      background-color: green;
+      color: white;
+     }
+
+     #editar{
+      background-color: rgb(255, 166, 0);
+      color: white;
+     }
+
+     #salvar{
+      background-color: #53d4ff;
+      color: white;
+     }
+
+     #cancelar{
+      background-color: white;
+      color: #53d4ff;
+     }
+
+     #excluir{
+      background-color: red;
+    color: white;
+       }
+
+     
+   </style>
+  <style>
+    /* styles omitted for brevity */
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Cadastro de Contato</h1>
+  </div>
+  
+  <div class="form-container">
+    <div class="form-inputs">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome">
+      <label for="sobrenome">Sobrenome</label>
+      <input type="text" id="sobrenome" name="sobrenome">
+      <label for="endereco">Endereço</label>
+      <input type="text" id="endereco" name="endereco">
+      <label for="telefone">Telefone</label>
+      <input type="text" id="telefone" name="telefone">
+    </div>
+    <div class="form-buttons">
+      <button id="incluir">INCLUIR</button>
+      <button id="editar">EDITAR</button>
+      <button id="salvar">SALVAR</button>
+      <button id="cancelar">CANCELAR</button>
+      <button id="excluir">EXCLUIR</button>
+    </div>
+  </div>
+  
+  <div class="contact-list">
+    <ul id="contact-list"></ul>
+  </div>
+  
+  <div class="pagination">
+    <button id="prev-page">|&lt;</button>
+    <button id="next-page">&lt;</button>
+    <button id="first-page">&gt;</button>
+    <button id="last-page">|&gt;</button>
+    <span id="page-info"></span>
+  </div>
+  
+  <script>
+    let contacts = []; // array para armazenar os contatos
+    let currentPage = 0; // página atual
+    let pageSize = 5; // tamanho da página
+
+    // função para adicionar um contato
+    function addContact() {
+      const nome = document.getElementById("nome").value;
+      const sobrenome = document.getElementById("sobrenome").value;
+      const endereco = document.getElementById("endereco").value;
+      const telefone = document.getElementById("telefone").value;
+
+      const newContact = {
+        nome,
+        sobrenome,
+        endereco,
+        telefone
+      };
+
+      contacts.push(newContact);
+      renderContacts();
+      clearForm();
+    }
+
+    // função para editar um contato
+    function editContact(index) {
+      const contact = contacts[index];
+      document.getElementById("nome").value = contact.nome;
+      document.getElementById("sobrenome").value = contact.sobrenome;
+      document.getElementById("endereco").value = contact.endereco;
+      document.getElementById("telefone").value = contact.telefone;
+    }
+
+    // função para salvar as alterações de um contato
+    function saveContact() {
+      const index = currentPage * pageSize;
+      const contact = contacts[index];
+      contact.nome = document.getElementById("nome").value;
+      contact.sobrenome = document.getElementById("sobrenome").value;
+      contact.endereco = document.getElementById("endereco").value;
+      contact.telefone = document.getElementById("telefone").value;
+      renderContacts();
+      clearForm();
+    }
+
+    // função para excluir um contato
+    function deleteContact(index) {
+      contacts.splice(index, 1);
+      renderContacts();
+    }
+
+    // função para renderizar a lista de contatos
+    function renderContacts() {
+      const contactList = document.getElementById("contact-list");
+      contactList.innerHTML = "";
+
+      const startIndex = currentPage * pageSize;
+      const endIndex = startIndex + pageSize;
+
+      for (let i = startIndex; i < endIndex && i < contacts.length; i++) {
+        const contact = contacts[i];
+        const listItem = document.createElement("li");
+        listItem.textContent = `${contact.nome} ${contact.sobrenome} - ${contact.endereco} - ${contact.telefone}`;
+        listItem.addEventListener("click", () => editContact(i));
+        contactList.appendChild(listItem);
+      }
+
+      updatePagination();
+    }
+
+    // função para limpar o formulário
+    function clearForm() {
+      document.getElementById("nome").value = "";
+      document.getElementById("sobrenome").value = "";
+      document.getElementById("endereco").value = "";
+      document.getElementById("telefone").value = "";
+    }
+
+    // função para atualizar a paginação
+    function updatePagination() {
+      const pagination = document.getElementById("pagination");
+      const pageInfo = document.getElementById("page-info");
+      pageInfo.textContent = `Página ${currentPage + 1} de ${Math.ceil(contacts.length / pageSize)}`;
+    }
+
+    // eventos de clique nos botões
+    document.getElementById("incluir").addEventListener("click", addContact);
+    document.getElementById("editar").addEventListener("click", () => editContact(currentPage * pageSize));
+    document.getElementById("salvar").addEventListener("click", saveContact);
+    document.getElementById("cancelar").addEventListener("click", clearForm);
+    document.getElementById("excluir").addEventListener("click", () => deleteContact(currentPage * pageSize));
+
+    // inicializar a lista de contatos
+    renderContacts();
+
+      // função para ir para a página anterior
+      function prevPage() {
+      if (currentPage > 0) {
+        currentPage--;
+        renderContacts();
+      }
+    }
+
+    // função para ir para a próxima página
+    function nextPage() {
+      if (currentPage < Math.ceil(contacts.length / pageSize) - 1) {
+        currentPage++;
+        renderContacts();
+      }
+    }
+
+    // função para ir para a primeira página
+    function firstPage() {
+      currentPage = 0;
+      renderContacts();
+    }
+
+    // função para ir para a última página
+    function lastPage() {
+      currentPage = Math.ceil(contacts.length / pageSize) - 1;
+      renderContacts();
+    }
+
+    // eventos de clique nos botões de paginação
+    document.getElementById("prev-page").addEventListener("click", prevPage);
+    document.getElementById("next-page").addEventListener("click", nextPage);
+    document.getElementById("first-page").addEventListener("click", firstPage);
+    document.getElementById("last-page").addEventListener("click", lastPage);
+  </script>
+</body>
+</html>
